@@ -37,6 +37,22 @@ RUN apt-get update \
 		golang-go \
 		libpcre3-dev \
 		mkisofs \
+        g++ \
+        cmake \
+        protobuf-compiler \
+        libprotobuf-dev \
+        libgoogle-perftools-dev \
+        libnl-3-dev \
+        libnl-genl-3-dev \
+        libnl-route-3-dev \
+        libnl-idiag-3-dev \
+        libncurses5-dev \
+        libelf-dev \
+        zlib1g-dev \
+        pandoc \
+        libbpf-dev \
+        libtool \
+        autoconf \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /app
