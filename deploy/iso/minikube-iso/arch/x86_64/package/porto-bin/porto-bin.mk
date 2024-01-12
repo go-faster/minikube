@@ -4,9 +4,13 @@
 #
 ################################################################################
 
-PORTO_BIN_VERSION = v5.3.30
-PORTO_BIN_SITE = https://storage.yandexcloud.net/faster-public/porto
-PORTO_BIN_SOURCE = porto-$(PORTO_BIN_VERSION).tgz
+PORTO_BIN_VERSION = v5.3.30-alpha.5
+PORTO_BIN_SITE = https://github.com/go-faster/porto/releases/download/$(PORTO_BIN_VERSION)
+PORTO_BIN_SOURCE = porto_focal_$(PORTO_BIN_VERSION)_amd64.tgz
+
+define PORTO_BIN_USERS
+	- -1 porto -1 - - - - -
+endef
 
 define PORTO_BIN_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 \
