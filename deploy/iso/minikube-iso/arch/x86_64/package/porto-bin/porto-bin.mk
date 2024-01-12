@@ -16,6 +16,9 @@ define PORTO_BIN_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 \
 		$(@D)/portod \
 		$(TARGET_DIR)/sbin/portod
+	$(INSTALL) -D -m 0755 \
+		$(@D)/portoctl \
+		$(TARGET_DIR)/sbin/portoctl
 
 	$(INSTALL) -Dm644 \
 		$(PORTO_BIN_PKGDIR)/k8s.conf \
