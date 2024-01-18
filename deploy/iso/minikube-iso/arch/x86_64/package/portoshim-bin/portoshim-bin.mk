@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-PORTOSHIM_BIN_VERSION = v1.0.9-alpha.2
+PORTOSHIM_BIN_VERSION = v1.0.9-alpha.4
 PORTOSHIM_BIN_SITE = https://github.com/go-faster/portoshim/releases/download/$(PORTOSHIM_BIN_VERSION)
 PORTOSHIM_BIN_SOURCE = portoshim_focal_$(PORTOSHIM_BIN_VERSION)_amd64.tgz
 
