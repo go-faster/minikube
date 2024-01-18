@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-PORTO_BIN_VERSION = v5.3.30-alpha.7
+PORTO_BIN_VERSION = v5.3.30-alpha.8
 PORTO_BIN_SITE = https://github.com/go-faster/porto/releases/download/$(PORTO_BIN_VERSION)
 PORTO_BIN_SOURCE = porto_focal_$(PORTO_BIN_VERSION)_amd64.tgz
 
@@ -19,7 +19,9 @@ define PORTO_BIN_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 \
 		$(@D)/portoctl \
 		$(TARGET_DIR)/sbin/portoctl
-
+	$(INSTALL) -D -m 0755 \
+		$(@D)/portoinit \
+		$(TARGET_DIR)/sbin/portoinit
 	$(INSTALL) -Dm644 \
 		$(PORTO_BIN_PKGDIR)/k8s.conf \
 		$(TARGET_DIR)/etc/portod.conf.d/k8s.conf

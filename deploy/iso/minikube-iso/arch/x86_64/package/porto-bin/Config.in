@@ -2,3 +2,4 @@ config BR2_PACKAGE_PORTO_BIN
 	bool "porto-bin"
 	default y
 	depends on BR2_x86_64
+	select BR2_PACKAGE_OPENSSL
