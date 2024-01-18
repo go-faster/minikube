@@ -44,6 +44,12 @@ func Pause(v semver.Version, mirror string) string {
 	return fmt.Sprintf("%s:%s", path.Join(kubernetesRepo(mirror), imageName), pv)
 }
 
+// PauseExact returns the image name for exact pause version.
+func PauseExact(v, mirror string) string {
+	imageName := "pause"
+	return fmt.Sprintf("%s:%s", path.Join(kubernetesRepo(mirror), imageName), v)
+}
+
 // essentials returns images needed too bootstrap a Kubernetes
 func essentials(mirror string, v semver.Version) []string {
 	imgs := []string{
@@ -53,6 +59,7 @@ func essentials(mirror string, v semver.Version) []string {
 		componentImage("kube-scheduler", v, mirror),
 		componentImage("kube-proxy", v, mirror),
 		Pause(v, mirror),
+		PauseExact("3.7", mirror),
 		etcd(v, mirror),
 		coreDNS(v, mirror),
 	}

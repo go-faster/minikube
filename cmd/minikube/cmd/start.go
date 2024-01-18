@@ -46,11 +46,13 @@ import (
 	"github.com/spf13/viper"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
+
 	"k8s.io/minikube/pkg/minikube/command"
 	"k8s.io/minikube/pkg/minikube/firewall"
 	netutil "k8s.io/minikube/pkg/network"
 
 	"k8s.io/klog/v2"
+
 	cmdcfg "k8s.io/minikube/cmd/minikube/cmd/config"
 	"k8s.io/minikube/pkg/drivers/kic/oci"
 	"k8s.io/minikube/pkg/minikube/bootstrapper/bsutil"
@@ -561,6 +563,8 @@ func showKubectlInfo(kcs *kubeconfig.Settings, k8sVersion, rtime, machineName st
 		case constants.Containerd:
 			out.BoxedWithConfig(boxConfig, style.Tip, "Things to try without Kubernetes ...", `- "minikube ssh" to SSH into minikube's node.
 - "minikube image" to build images without docker.`)
+		case constants.Porto:
+			out.BoxedWithConfig(boxConfig, style.Tip, "Things to try without Kubernetes ...", `- "minikube ssh" to SSH into minikube's node.`)
 		case constants.CRIO:
 			out.BoxedWithConfig(boxConfig, style.Tip, "Things to try without Kubernetes ...", `- "minikube ssh" to SSH into minikube's node.
 - "minikube podman-env" to point your podman-cli to the podman inside minikube.

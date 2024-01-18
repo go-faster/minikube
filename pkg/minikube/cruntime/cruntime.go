@@ -25,6 +25,7 @@ import (
 	"github.com/blang/semver/v4"
 	"github.com/pkg/errors"
 	"k8s.io/klog/v2"
+
 	"k8s.io/minikube/pkg/minikube/assets"
 	"k8s.io/minikube/pkg/minikube/command"
 	"k8s.io/minikube/pkg/minikube/config"
@@ -50,7 +51,7 @@ func (cs ContainerState) String() string {
 
 // ValidRuntimes lists the supported container runtimes
 func ValidRuntimes() []string {
-	return []string{"docker", "cri-o", "containerd"}
+	return []string{"docker", "cri-o", "containerd", "porto"}
 }
 
 // CommandRunner is the subset of command.Runner this package consumes
@@ -248,6 +249,15 @@ func New(c Config) (Manager, error) {
 			Init:              sm,
 			InsecureRegistry:  c.InsecureRegistry,
 		}, nil
+	case "porto":
+		return &Porto{
+			Socket:            c.Socket,
+			Runner:            c.Runner,
+			ImageRepository:   c.ImageRepository,
+			KubernetesVersion: c.KubernetesVersion,
+			Init:              sm,
+			InsecureRegistry:  c.InsecureRegistry,
+		}, nil
 	default:
 		return nil, fmt.Errorf("unknown runtime type: %q", c.Type)
 	}
@@ -262,7 +272,7 @@ func ContainerStatusCommand() string {
 // disableOthers disables all other runtimes except for me.
 func disableOthers(me Manager, cr CommandRunner) error {
 	// valid values returned by manager.Name()
-	runtimes := []string{"containerd", "crio", "docker"}
+	runtimes := []string{"containerd", "crio", "docker", "porto"}
 	for _, name := range runtimes {
 		r, err := New(Config{Type: name, Runner: cr})
 		if err != nil {

@@ -106,4 +106,5 @@ const (
 	Workaround
 	CNI
 	Toolkit
+	Porto
 )

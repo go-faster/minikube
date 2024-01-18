@@ -24,6 +24,7 @@ import (
 
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
+
 	"k8s.io/minikube/pkg/minikube/vmpath"
 )
 
@@ -63,6 +64,8 @@ const (
 	CRIO = "crio"
 	// Docker is the default name and spelling for the docker container runtime
 	Docker = "docker"
+	// Porto is the default name and spelling for the porto container runtime
+	Porto = "porto"
 	// DefaultContainerRuntime is our default container runtime
 	DefaultContainerRuntime = ""
 

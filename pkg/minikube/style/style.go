@@ -110,6 +110,7 @@ var Config = map[Enum]Options{
 	Connectivity:     {Prefix: "📶  "},
 	Containerd:       {Prefix: "📦  "},
 	ContainerRuntime: {Prefix: "🎁  "},
+	Porto:            {Prefix: "🎁  "},
 	Copying:          {Prefix: "✨  "},
 	CRIO:             {Prefix: "🎁  "}, // This should be a snow-flake, but the emoji has a strange width on macOS
 	DeletingHost:     {Prefix: "🔥  "},
