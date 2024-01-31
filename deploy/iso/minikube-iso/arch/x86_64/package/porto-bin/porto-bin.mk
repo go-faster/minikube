@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-PORTO_BIN_VERSION = v5.3.31
+PORTO_BIN_VERSION = v5.3.32-alpha.0
 PORTO_BIN_SITE = https://github.com/go-faster/porto/releases/download/$(PORTO_BIN_VERSION)
 PORTO_BIN_SOURCE = porto_focal_$(PORTO_BIN_VERSION)_amd64.tgz
 
