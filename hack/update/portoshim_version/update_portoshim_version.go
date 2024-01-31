@@ -27,6 +27,7 @@ import (
 	"time"
 
 	"k8s.io/klog/v2"
+
 	"k8s.io/minikube/hack/update"
 )
 
@@ -64,18 +65,21 @@ func main() {
 }
 
 func updateHashFile(version, arch, packagePath string) error {
-	r, err := http.Get(fmt.Sprintf("https://github.com/go-faster/portoshim/releases/download/v%s/portoshim_focal_%s_%s.tgz", version, version, arch))
+	link := fmt.Sprintf("https://github.com/go-faster/portoshim/releases/download/%[1]s/portoshim_focal_%[1]s_%[2]s.tgz", version, arch)
+	r, err := http.Get(link)
 	if err != nil {
-		return fmt.Errorf("failed to download source code: %v", err)
+		return fmt.Errorf("failed to download binary: %v", err)
 	}
 	defer r.Body.Close()
-	b, err := io.ReadAll(r.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read response body: %v", err)
+	if r.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to download binary: %s", r.Status)
 	}
-	sum := sha256.Sum256(b)
+	h := sha256.New()
+	if _, err := io.Copy(h, r.Body); err != nil {
+		return fmt.Errorf("failed to copy response body: %v", err)
+	}
 	filePath := fmt.Sprintf("../../../deploy/iso/minikube-iso/arch/%s/portoshim-bin.hash", packagePath)
-	b, err = os.ReadFile(filePath)
+	b, err := os.ReadFile(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to read hash file: %v", err)
 	}
@@ -88,7 +92,7 @@ func updateHashFile(version, arch, packagePath string) error {
 		return fmt.Errorf("failed to open hash file: %v", err)
 	}
 	defer f.Close()
-	if _, err := f.WriteString(fmt.Sprintf("sha256 %x  portoshim_focal_%s_%s.tgz\n", sum, version, arch)); err != nil {
+	if _, err := f.WriteString(fmt.Sprintf("sha256 %x  portoshim_focal_%s_%s.tgz\n", h.Sum(nil), version, arch)); err != nil {
 		return fmt.Errorf("failed to write to hash file: %v", err)
 	}
 	return nil
