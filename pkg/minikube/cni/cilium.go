@@ -24,6 +24,7 @@ import (
 	"github.com/pkg/errors"
 	"k8s.io/klog/v2"
 	"k8s.io/minikube/pkg/minikube/config"
+	"k8s.io/minikube/pkg/minikube/constants"
 )
 
 // From https://raw.githubusercontent.com/cilium/cilium/v1.9/install/kubernetes/quick-install.yaml
@@ -544,8 +545,10 @@ spec:
             - SYS_MODULE
           privileged: true
         volumeMounts:
+        {{ if $.MountBPF -}}
         - mountPath: /sys/fs/bpf
           name: bpf-maps
+        {{- end }}
         - mountPath: /var/run/cilium
           name: cilium-run
         - mountPath: /host/opt/cni/bin
@@ -625,9 +628,11 @@ spec:
             - NET_ADMIN
           privileged: true
         volumeMounts:
+        {{ if $.MountBPF -}}
         - mountPath: /sys/fs/bpf
           name: bpf-maps
           mountPropagation: HostToContainer
+        {{- end }}
           # Required to mount cgroup filesystem from the host to cilium agent pod
         - mountPath: /run/cilium/cgroupv2
           name: cilium-cgroup
@@ -651,11 +656,13 @@ spec:
           path: /var/run/cilium
           type: DirectoryOrCreate
         name: cilium-run
+      {{ if $.MountBPF -}}
         # To keep state between restarts / upgrades for bpf maps
       - hostPath:
           path: /sys/fs/bpf
           type: DirectoryOrCreate
         name: bpf-maps
+      {{- end }}
       # To mount cgroup2 filesystem on the host
       - hostPath:
           path: /proc
@@ -825,16 +832,17 @@ func (c Cilium) CIDR() string {
 }
 
 // GenerateCiliumYAML generates the .yaml file
-func GenerateCiliumYAML() ([]byte, error) {
-
+func GenerateCiliumYAML(mountBPF bool) ([]byte, error) {
 	podCIDR := DefaultPodCIDR
 
 	klog.Infof("Using pod CIDR: %s", podCIDR)
 
 	opts := struct {
 		PodSubnet string
+		MountBPF  bool
 	}{
 		PodSubnet: podCIDR,
+		MountBPF:  mountBPF,
 	}
 
 	b := bytes.Buffer{}
@@ -855,7 +863,15 @@ func (c Cilium) Apply(r Runner) error {
 		return errors.Wrap(err, "bpf mount")
 	}
 
-	ciliumCfg, err := GenerateCiliumYAML()
+	mountBPF := true
+	switch c.cc.KubernetesConfig.ContainerRuntime {
+	case constants.CRIO, constants.Porto:
+		// CRIO and Porto mount bpffs by default.
+		//
+		// Avoid "multiple mount points detected at /sys/fs/bpf".
+		mountBPF = false
+	}
+	ciliumCfg, err := GenerateCiliumYAML(mountBPF)
 	if err != nil {
 		return errors.Wrap(err, "generating cilium cfg")
 	}
