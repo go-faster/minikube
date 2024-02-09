@@ -300,7 +300,7 @@ rules:
   - list
   - watch
   - delete
-  - apiGroups:
+- apiGroups:
   - ""
   resources:
   - nodes
