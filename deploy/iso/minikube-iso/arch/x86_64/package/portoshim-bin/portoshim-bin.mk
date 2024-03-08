@@ -5,8 +5,8 @@
 ################################################################################
 
 PORTOSHIM_BIN_VERSION = v1.0.11-alpha.11
-PORTOSHIM_BIN_SITE = https://github.com/go-faster/portoshim/releases/download/$(PORTOSHIM_BIN_VERSION)
-PORTOSHIM_BIN_SOURCE = portoshim_focal_$(PORTOSHIM_BIN_VERSION)_amd64.tgz
+PORTOSHIM_BIN_SITE = https://ytsaurus.hb.ru-msk.vkcs.cloud/portoshim
+PORTOSHIM_BIN_SOURCE = portoshim-$(PORTOSHIM_BIN_VERSION).tgz
 
 define PORTOSHIM_BIN_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 \
